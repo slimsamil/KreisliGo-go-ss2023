@@ -1,20 +1,42 @@
 package model
 
-import "time"
+import (
+	"gorm.io/gorm"
+	"time"
+)
 
-type Event string
+type Status string
 
 const (
-	TOR Event = "Tor"
-	GELB Event = "Gelbe Karte"
-	GELBROT Event = "Gelb-rote Karte"
-	ROT Event = "Rote Karte"
-	WECHSEL Event = "Auswechslung"
+	ANSTEHEND Status = "Anstehend"
+	LÄUFT Status = "Läuft"
+	BEENDET Status = "Beendet"
 )
 
 type Game struct {
-	Home Team
-	Away Team
-	Events []Event
-	Date time.Time
+	gorm.Model
+	Home Team `gorm:"notNull"`
+	HomeGoals uint
+	Away Team `gorm:"notNull"`
+	AwayGoals uint
+	Events []Event `gorm:"foreignKey:GameID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Date time.Time `gorm:"notNull"`
+	Status Status `gorm:"notNull"`
+	Result string //COMPUTED
 }
+
+func (g *Game) FindResult(tx *gorm.DB) (err error) {
+
+	if g.Status == BEENDET {
+		if g.HomeGoals > g.AwayGoals {
+			g.Result = "Heim"
+		} else if g.HomeGoals < g.AwayGoals {
+			g.Result = "Auswärts"
+		} else {
+			g.Result = "Unentschieden"
+		}
+	}
+	return nil
+}
+
+// COMPUTATION FOR EVENTS

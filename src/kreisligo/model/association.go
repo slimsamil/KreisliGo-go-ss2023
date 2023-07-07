@@ -1,7 +1,14 @@
 package model
 
-type Association struct {
+import ( 
+	
+	"gorm.io/gorm"
 
-	Name string
-	Leagues []League
+)
+
+type Association struct {
+	gorm.Model
+	
+	Name string `gorm:"notNull;size:50"`
+	Leagues []League `gorm:"foreignKey:AssociationID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }

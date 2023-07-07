@@ -1,5 +1,11 @@
 package model
 
+import (
+
+	"gorm.io/gorm"
+
+)
+
 type Division string 
 
 const (
@@ -9,7 +15,12 @@ const (
 )
 
 type League struct {
+	gorm.Model
 
-	Division Division
-	Teams []Team
+	AssociationId uint
+	Name string `gorm:"notNull"`
+	Division Division `gorm:"notNull"`
+	Teams []Team `gorm:"foreignKey:LeagueID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
+
+// COMPUTATION FOR TABLE
