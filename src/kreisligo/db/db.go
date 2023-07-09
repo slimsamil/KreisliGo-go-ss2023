@@ -23,7 +23,7 @@ func Init() {
 func Connect(connect string) error {
 	// init DB
 	var err error
-	dsn := fmt.Sprintf("root:root@tcp(%s)/myaktion?charset=utf8&parseTime=True&loc=Local", connect)
+	dsn := fmt.Sprintf("root:root@tcp(%s)/kreisligo?charset=utf8&parseTime=True&loc=Local", connect)
 	log.Info("Using DSN for DB:", dsn)
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {

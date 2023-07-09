@@ -50,7 +50,8 @@ func UpdateTeam(id uint, team *model.Team) (*model.Team, error) {
 	}
 	existingTeam.Name = team.Name
 	existingTeam.Roster = team.Roster
-	existingTeam.Games = team.Games
+	existingTeam.HomeGames = team.HomeGames
+	existingTeam.AwayGames = team.AwayGames
 	result := db.DB.Save(existingTeam)
 	if result.Error != nil {
 		return nil, result.Error

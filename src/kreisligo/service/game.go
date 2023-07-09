@@ -48,9 +48,9 @@ func UpdateGame(id uint, game *model.Game) (*model.Game, error) {
 	if existingGame == nil || err != nil {
 		return existingGame, err
 	}
-	existingGame.Home = game.Home
+	existingGame.HomeID = game.HomeID
 	existingGame.HomeGoals = game.HomeGoals
-	existingGame.Away = game.Away
+	existingGame.AwayID = game.AwayID
 	existingGame.AwayGoals = game.AwayGoals
 	existingGame.Events = game.Events
 	existingGame.Status = game.Status

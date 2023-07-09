@@ -16,7 +16,7 @@ func SetupTestDB(t *testing.T) func() {
 	runDockerOpt := &dockertest.RunOptions{
 		Repository: "mariadb",
 		Tag:        "10.5",
-		Env:        []string{"MYSQL_ROOT_PASSWORD=root", "MYSQL_DATABASE=myaktion"},
+		Env:        []string{"MYSQL_ROOT_PASSWORD=root", "MYSQL_DATABASE=kreisligo"},
 		PortBindings: map[docker.Port][]docker.PortBinding{
 			"3306/tcp": {{HostIP: "localhost", HostPort: "3306/tcp"}},
 		},

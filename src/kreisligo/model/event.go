@@ -22,7 +22,7 @@ const (
 type Event struct {
 	gorm.Model
 
-	GameId uint
-	EventType EventType
+	GameID uint
+	EventType EventType `gorm:"notNull;type:ENUM('Tor', 'Gelbe Karte', 'Gelb-rote Karte', 'Rote Karte', 'Auswechslung', 'Anpfiff', 'Halbzeit', 'Abpfiff')"`
 	Player Player
 }

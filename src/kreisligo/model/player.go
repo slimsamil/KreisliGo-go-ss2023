@@ -18,9 +18,9 @@ const (
 type Player struct {
 	gorm.Model
 
-	TeamId uint
+	TeamID uint
 	Name string `gorm:"notNull"`
-	Position Position `gorm:"notNull"`
+	Position Position `gorm:"notNull;type:ENUM('Torwart', 'Verteidigung', 'Mittelfeld', 'Sturm')"`
 	JerseyNumber uint8 `gorm:"size:99"`
 	Goals uint //COMPUTED
 	YellowCards uint //COMPUTED

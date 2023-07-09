@@ -1,0 +1,16 @@
+services:
+  
+  kreisligo:
+    build:
+      context: ./src
+      dockerfile: kreisligo/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_CONNECT=mariadb:3306
+      - LOG_LEVEL=info # change to trace for debugging
+  mariadb:
+    image: mariadb:10.5
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=kreisligo
