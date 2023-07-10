@@ -9,7 +9,9 @@ import(
 type EventType string
 
 const (
-	TOR EventType = "Tor"
+	TORAUSWÄRTS EventType = "Tor Auswärts"
+	TORHEIM EventType = "Tor Heim"
+
 	GELB EventType = "Gelbe Karte"
 	GELBROT EventType = "Gelb-rote Karte"
 	ROT EventType = "Rote Karte"
@@ -23,6 +25,6 @@ type Event struct {
 	gorm.Model
 
 	GameID uint
-	EventType EventType `gorm:"notNull;type:ENUM('Tor', 'Gelbe Karte', 'Gelb-rote Karte', 'Rote Karte', 'Auswechslung', 'Anpfiff', 'Halbzeit', 'Abpfiff')"`
+	EventType EventType `gorm:"notNull;type:ENUM('Tor Auswärts', 'Tor Heim', 'Gelbe Karte', 'Gelb-rote Karte', 'Rote Karte', 'Auswechslung', 'Anpfiff', 'Halbzeit', 'Abpfiff')"`
 	PlayerID uint
 }

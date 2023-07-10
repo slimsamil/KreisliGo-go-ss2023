@@ -25,3 +25,10 @@ type League struct {
 }
 
 // COMPUTATION FOR TABLE
+func (l *League) SortTable(tx *gorm.DB) (err error) {
+	result := tx.Model(&l.Teams).Select("*").Where("team_id = ?", l.ID).Order("Points")
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}

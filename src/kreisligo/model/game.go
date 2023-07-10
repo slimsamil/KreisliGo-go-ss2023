@@ -1,8 +1,8 @@
 package model
 
 import (
-	"gorm.io/gorm"
 	"time"
+	"gorm.io/gorm"
 )
 
 type Status string
@@ -27,18 +27,60 @@ type Game struct {
 	Result string //COMPUTED
 }
 
+// COMPUTATION FOR RESULTS
 func (g *Game) FindResult(tx *gorm.DB) (err error) {
-	
 	if g.Status == BEENDET {
-		if g.HomeGoals > g.AwayGoals {
-			g.Result = "Heim"
-		} else if g.HomeGoals < g.AwayGoals {
-			g.Result = "Auswärts"
-		} else {
-			g.Result = "Unentschieden"
+		var gameResult string;
+		result := tx.Select("*").Where("game_id = ?", g.ID)
+		if result.Error != nil {
+			return result.Error
 		}
+		if g.Status == BEENDET {
+			if g.HomeGoals > g.AwayGoals {
+				gameResult = "Heim"
+			} else if g.HomeGoals < g.AwayGoals {
+				gameResult = "Auswärts"
+			} else {
+				gameResult = "Unentschieden"
+			}
+		}
+	g.Result = gameResult
 	}
 	return nil
 }
 
 // COMPUTATION FOR EVENTS
+func (g *Game) ComputateEvents(tx *gorm.DB) (err error) {
+	var homeGoals uint;
+	var awayGoals uint;
+	var status Status;
+	result := tx.Select("*").Where("game_id = ?", g.ID)
+	if result.Error != nil {
+		return result.Error
+	}
+	if g.Events[0].EventType == "Anpfiff" {
+		if g.Events[-len(g.Events)-1].EventType == "Abpfiff" {
+			status = "Beendet"
+		} else {
+			status = "Läuft"
+		}
+	} else {
+		status = "Anstehend"
+	}
+
+	if status == "Läuft" {
+		for _, event := range g.Events {
+			if event.EventType == "Tor Heim" {
+				homeGoals += 1;
+			}
+			if event.EventType == "Tor Auswärts" {
+				awayGoals += 1;
+			}
+		}
+	}
+
+	g.AwayGoals = awayGoals
+	g.HomeGoals = homeGoals
+	g.Status = status
+	return nil
+}
