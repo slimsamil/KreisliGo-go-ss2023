@@ -22,7 +22,7 @@ func CreateAssociation(association *model.Association) error {
 
 func GetAssociations() ([]model.Association, error) {
 	var associations []model.Association
-	result := db.DB.Preload("Donations").Find(&associations)
+	result := db.DB.Preload("Leagues").Find(&associations)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -32,7 +32,7 @@ func GetAssociations() ([]model.Association, error) {
 
 func GetAssociation(id uint) (*model.Association, error) {
 	association := new(model.Association)
-	result := db.DB.Preload("Donations").First(association, id)
+	result := db.DB.Preload("Leagues").First(association, id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, nil
 	}

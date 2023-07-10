@@ -20,8 +20,8 @@ type League struct {
 	AssociationID uint
 	Name string `gorm:"notNull"`
 	Division Division `gorm:"notNull;type:ENUM('Kreisliga', 'Bezirksliga', 'Landesliga')"`
-	Teams []Team `gorm:"foreignKey:LeagueID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
-	Games []Game `gorm:"foreignKey:LeagueID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Teams []Team `gorm:"foreignKey:LeagueID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
+	Games []Game `gorm:"foreignKey:LeagueID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 }
 
 // COMPUTATION FOR TABLE

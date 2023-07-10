@@ -11,12 +11,17 @@ import (
 )
 
 func CreatePlayer(w http.ResponseWriter, r *http.Request) {
+	id, err := getId(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	player, err := getPlayer(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	if err = service.CreatePlayer(player); err != nil {
+	if err = service.CreatePlayer(id, player); err != nil {
 		log.Printf("Error calling service CreatePlayer: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

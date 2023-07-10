@@ -11,12 +11,17 @@ import (
 )
 
 func CreateGame(w http.ResponseWriter, r *http.Request) {
+	id, err := getId(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	game, err := getGame(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	if err = service.CreateGame(game); err != nil {
+	if err = service.CreateGame(id, game); err != nil {
 		log.Printf("Error calling service CreateGame: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

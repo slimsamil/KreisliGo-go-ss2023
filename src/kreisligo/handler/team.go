@@ -11,12 +11,17 @@ import (
 )
 
 func CreateTeam(w http.ResponseWriter, r *http.Request) {
+	id, err := getId(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	team, err := getTeam(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	if err = service.CreateTeam(team); err != nil {
+	if err = service.CreateTeam(id, team); err != nil {
 		log.Printf("Error calling service CreateTeam: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

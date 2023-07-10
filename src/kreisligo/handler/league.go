@@ -11,12 +11,17 @@ import (
 )
 
 func CreateLeague(w http.ResponseWriter, r *http.Request) {
+	id, err := getId(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	league, err := getLeague(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	if err = service.CreateLeague(league); err != nil {
+	if err = service.CreateLeague(id, league); err != nil {
 		log.Printf("Error calling service CreateLeague: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

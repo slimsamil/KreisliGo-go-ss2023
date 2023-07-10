@@ -11,12 +11,18 @@ import (
 )
 
 func CreateEvent(w http.ResponseWriter, r *http.Request) {
+	id, err := getId(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
 	event, err := getEvent(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	if err = service.CreateEvent(event); err != nil {
+	if err = service.CreateEvent(id, event); err != nil {
 		log.Printf("Error calling service CreateEvent: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -21,7 +21,7 @@ type Game struct {
 	HomeGoals uint
 	AwayID uint
 	AwayGoals uint
-	Events []Event `gorm:"foreignKey:GameID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Events []Event `gorm:"foreignKey:GameID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 	Date time.Time `gorm:"notNull"`
 	Status Status `gorm:"notNull;type:ENUM('Anstehend', 'Läuft', 'Beendet')"`
 	Result string //COMPUTED

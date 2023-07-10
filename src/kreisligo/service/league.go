@@ -10,7 +10,8 @@ import (
 	"github.com/slimsamil/KreisliGo-go-ss2023/src/kreisligo/model"
 )
 
-func CreateLeague(league *model.League) error {
+func CreateLeague(associationID uint, league *model.League) error {
+	league.AssociationID = associationID
 	result := db.DB.Create(league)
 	if result.Error != nil {
 		return result.Error
@@ -22,7 +23,7 @@ func CreateLeague(league *model.League) error {
 
 func GetLeagues() ([]model.League, error) {
 	var leagues []model.League
-	result := db.DB.Preload("Donations").Find(&leagues)
+	result := db.DB.Find(&leagues)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -32,7 +33,7 @@ func GetLeagues() ([]model.League, error) {
 
 func GetLeague(id uint) (*model.League, error) {
 	league := new(model.League)
-	result := db.DB.Preload("Donations").First(league, id)
+	result := db.DB.First(league, id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, nil
 	}

@@ -10,7 +10,8 @@ import (
 	"github.com/slimsamil/KreisliGo-go-ss2023/src/kreisligo/model"
 )
 
-func CreateGame(game *model.Game) error {
+func CreateGame(LeagueID uint, game *model.Game) error {
+	game.LeagueID = LeagueID
 	result := db.DB.Create(game)
 	if result.Error != nil {
 		return result.Error
@@ -22,7 +23,7 @@ func CreateGame(game *model.Game) error {
 
 func GetGames() ([]model.Game, error) {
 	var games []model.Game
-	result := db.DB.Preload("Donations").Find(&games)
+	result := db.DB.Find(&games)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -32,7 +33,7 @@ func GetGames() ([]model.Game, error) {
 
 func GetGame(id uint) (*model.Game, error) {
 	game := new(model.Game)
-	result := db.DB.Preload("Donations").First(game, id)
+	result := db.DB.First(game, id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, nil
 	}

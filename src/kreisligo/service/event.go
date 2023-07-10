@@ -10,7 +10,8 @@ import (
 	"github.com/slimsamil/KreisliGo-go-ss2023/src/kreisligo/model"
 )
 
-func CreateEvent(event *model.Event) error {
+func CreateEvent(GameID uint, event *model.Event) error {
+	event.GameID = GameID
 	result := db.DB.Create(event)
 	if result.Error != nil {
 		return result.Error
@@ -22,7 +23,7 @@ func CreateEvent(event *model.Event) error {
 
 func GetEvents() ([]model.Event, error) {
 	var events []model.Event
-	result := db.DB.Preload("Donations").Find(&events)
+	result := db.DB.Find(&events)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -32,7 +33,7 @@ func GetEvents() ([]model.Event, error) {
 
 func GetEvent(id uint) (*model.Event, error) {
 	event := new(model.Event)
-	result := db.DB.Preload("Donations").First(event, id)
+	result := db.DB.First(event, id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, nil
 	}
@@ -49,7 +50,7 @@ func UpdateEvent(id uint, event *model.Event) (*model.Event, error) {
 		return existingEvent, err
 	}
 	existingEvent.EventType = event.EventType
-	existingEvent.Player = event.Player
+	existingEvent.PlayerID = event.PlayerID
 	result := db.DB.Save(existingEvent)
 	if result.Error != nil {
 		return nil, result.Error

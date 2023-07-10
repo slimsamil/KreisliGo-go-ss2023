@@ -22,6 +22,7 @@ type Player struct {
 	Name string `gorm:"notNull"`
 	Position Position `gorm:"notNull;type:ENUM('Torwart', 'Verteidigung', 'Mittelfeld', 'Sturm')"`
 	JerseyNumber uint8 `gorm:"size:99"`
+	Events []Event `gorm:"foreignKey:PlayerID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 	Goals uint //COMPUTED
 	YellowCards uint //COMPUTED
 	RedCards uint //COMPUTED

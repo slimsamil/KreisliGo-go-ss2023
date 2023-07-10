@@ -24,5 +24,5 @@ type Event struct {
 
 	GameID uint
 	EventType EventType `gorm:"notNull;type:ENUM('Tor', 'Gelbe Karte', 'Gelb-rote Karte', 'Rote Karte', 'Auswechslung', 'Anpfiff', 'Halbzeit', 'Abpfiff')"`
-	Player Player
+	PlayerID uint
 }

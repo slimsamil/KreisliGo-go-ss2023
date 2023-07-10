@@ -8,11 +8,11 @@ import (
 
 type Team struct {
 	gorm.Model
-	D uint
+	LeagueID uint
 	Name string `gorm:"notNull;size:50"`
-	Roster []Player `gorm:"foreignKey:TeamID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
-	AwayGames []Game `gorm:"foreignKey:AwayID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
-	HomeGames []Game `gorm:"foreignKey:HomeID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Roster []Player `gorm:"foreignKey:TeamID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
+	AwayGames []Game `gorm:"foreignKey:AwayID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
+	HomeGames []Game `gorm:"foreignKey:HomeID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
 	Wins uint //COMPUTED
 	Losses uint //COMPUTED
 	Draws uint //COMPUTED
