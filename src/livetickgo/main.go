@@ -6,6 +6,7 @@ import (
 	"os"
 
 	log "github.com/sirupsen/logrus"
+	"github.com/slimsamil/KreisliGo-go-ss2023/src/livetickgo/service"
 	"github.com/slimsamil/KreisliGo-go-ss2023/src/livetickgo/grpc/livetickgo"
 	"github.com/slimsamil/KreisliGo-go-ss2023/src/livetickgo/service"
 	"google.golang.org/grpc"
@@ -33,10 +34,10 @@ func main() {
 		log.Fatalf("failed to listen on grpc port %d: %v", grpcPort, err)
 	}
 	grpcServer := grpc.NewServer()
-	transferService := service.NewBankTransferService()
-	transferService.Start()
-	defer transferService.Stop()
-	banktransfer.RegisterBankTransferServer(grpcServer, service.NewBankTransferService())
+	service := service.NewLivetickgoService()
+	service.Start()
+	defer service.Stop()
+	service.RegisterLivetickgoServer(grpcServer, service.NewLivetickgoService())
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
