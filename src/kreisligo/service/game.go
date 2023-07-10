@@ -23,7 +23,7 @@ func CreateGame(LeagueID uint, game *model.Game) error {
 
 func GetGames() ([]model.Game, error) {
 	var games []model.Game
-	result := db.DB.Find(&games)
+	result := db.DB.Preload("Events").Find(&games)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -33,7 +33,7 @@ func GetGames() ([]model.Game, error) {
 
 func GetGame(id uint) (*model.Game, error) {
 	game := new(model.Game)
-	result := db.DB.First(game, id)
+	result := db.DB.Preload("Events").First(game, id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, nil
 	}

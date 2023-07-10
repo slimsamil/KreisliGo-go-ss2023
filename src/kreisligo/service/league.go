@@ -23,7 +23,7 @@ func CreateLeague(associationID uint, league *model.League) error {
 
 func GetLeagues() ([]model.League, error) {
 	var leagues []model.League
-	result := db.DB.Find(&leagues)
+	result := db.DB.Preload("Teams").Find(&leagues)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -33,7 +33,7 @@ func GetLeagues() ([]model.League, error) {
 
 func GetLeague(id uint) (*model.League, error) {
 	league := new(model.League)
-	result := db.DB.First(league, id)
+	result := db.DB.Preload("Teams").First(league, id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, nil
 	}
