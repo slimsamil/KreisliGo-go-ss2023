@@ -28,7 +28,7 @@ func GetGames() ([]model.Game, error) {
 		return nil, result.Error
 	}
 	for _, game := range games {
-		game.ComputateGame(db.DB)
+		game.ComputateGame(db.DB.Preload("Events"))
 	}
 	log.Tracef("Retrieved: %v", games)
 	return games, nil

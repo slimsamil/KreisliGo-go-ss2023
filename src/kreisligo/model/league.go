@@ -24,3 +24,11 @@ type League struct {
 	Games []Game `gorm:"foreignKey:LeagueID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
+func (l *League) SortTable(tx *gorm.DB) (err error) {
+	result := tx.Model(&l.Teams).Select("*").Where("league_id = ?", l.ID).Order("Points")
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+

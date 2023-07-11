@@ -40,6 +40,7 @@ func GetLeague(id uint) (*model.League, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
+	league.SortTable(db.DB.Preload("Teams"))
 	log.Tracef("Retrieved: %v", league)
 	return league, nil
 }
