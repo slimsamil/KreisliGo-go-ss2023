@@ -27,6 +27,9 @@ func GetPlayers() ([]model.Player, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
+	for _, player := range players {
+		player.CalcStats(db.DB.Preload("Events"))
+	}
 	log.Tracef("Retrieved: %v", players)
 	return players, nil
 }
@@ -40,6 +43,7 @@ func GetPlayer(id uint) (*model.Player, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
+	player.CalcStats(db.DB.Preload("Events"))
 	log.Tracef("Retrieved: %v", player)
 	return player, nil
 }

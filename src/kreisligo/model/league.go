@@ -20,15 +20,7 @@ type League struct {
 	AssociationID uint
 	Name string `gorm:"notNull"`
 	Division Division `gorm:"notNull;type:ENUM('Kreisliga', 'Bezirksliga', 'Landesliga')"`
-	Teams []Team `gorm:"foreignKey:LeagueID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
-	Games []Game `gorm:"foreignKey:LeagueID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
+	Teams []Team `gorm:"foreignKey:LeagueID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Games []Game `gorm:"foreignKey:LeagueID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
-// COMPUTATION FOR TABLE
-func (l *League) SortTable(tx *gorm.DB) (err error) {
-	result := tx.Model(&l.Teams).Select("*").Where("team_id = ?", l.ID).Order("Points")
-	if result.Error != nil {
-		return result.Error
-	}
-	return nil
-}

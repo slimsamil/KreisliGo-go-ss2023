@@ -27,6 +27,9 @@ func GetGames() ([]model.Game, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
+	for _, game := range games {
+		game.ComputateGame(db.DB)
+	}
 	log.Tracef("Retrieved: %v", games)
 	return games, nil
 }
@@ -40,6 +43,7 @@ func GetGame(id uint) (*model.Game, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
+	game.ComputateGame(db.DB.Preload("Events"))
 	log.Tracef("Retrieved: %v", game)
 	return game, nil
 }
@@ -55,7 +59,6 @@ func UpdateGame(id uint, game *model.Game) (*model.Game, error) {
 	existingGame.AwayGoals = game.AwayGoals
 	existingGame.Events = game.Events
 	existingGame.Status = game.Status
-	existingGame.Date = game.Date
 	result := db.DB.Save(existingGame)
 	if result.Error != nil {
 		return nil, result.Error

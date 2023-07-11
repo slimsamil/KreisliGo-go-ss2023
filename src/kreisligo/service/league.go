@@ -12,7 +12,7 @@ import (
 
 func CreateLeague(associationID uint, league *model.League) error {
 	league.AssociationID = associationID
-	result := db.DB.Create(league)
+	result := db.DB.Preload("Teams").Preload("Games").Create(league)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -52,6 +52,7 @@ func UpdateLeague(id uint, league *model.League) (*model.League, error) {
 	existingLeague.Name = league.Name
 	existingLeague.Division = league.Division
 	existingLeague.Teams = league.Teams
+	existingLeague.Games = league.Games
 	result := db.DB.Save(existingLeague)
 	if result.Error != nil {
 		return nil, result.Error

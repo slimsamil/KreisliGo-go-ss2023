@@ -1,8 +1,5 @@
 services:
-  livetickgo:
-    build:
-      context: ./src
-      dockerfile: livetickgo/Dockerfile
+
 
   kreisligo:
     build:

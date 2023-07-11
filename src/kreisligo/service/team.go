@@ -40,6 +40,7 @@ func GetTeam(id uint) (*model.Team, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
+	team.CalcPoints(db.DB.Preload("AwayGames").Preload("HomeGames"))
 	log.Tracef("Retrieved: %v", team)
 	return team, nil
 }

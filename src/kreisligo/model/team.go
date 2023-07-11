@@ -10,9 +10,9 @@ type Team struct {
 	gorm.Model
 	LeagueID uint
 	Name string `gorm:"notNull;size:50"`
-	Roster []Player `gorm:"foreignKey:TeamID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
-	AwayGames []Game `gorm:"foreignKey:AwayID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
-	HomeGames []Game `gorm:"foreignKey:HomeID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL"`
+	Roster []Player `gorm:"foreignKey:TeamID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	AwayGames []Game `gorm:"foreignKey:AwayID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	HomeGames []Game `gorm:"foreignKey:HomeID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	Wins uint `gorm:"-"` //COMPUTED 
 	Losses uint `gorm:"-"` //COMPUTED
 	Draws uint `gorm:"-"` //COMPUTED
@@ -31,7 +31,11 @@ func (t *Team) CalcPoints(tx *gorm.DB) (err error) {
 		return result.Error
 	}
 
+	if len(t.HomeGames) < 1 && len(t.AwayGames) < 1 {
+		return nil
+	}
 	for _, game := range t.HomeGames {
+		if game.Status == "Beendet" || game.Status == "Läuft" {
 			if game.Result == "Heim" {
 				wins += 1
 				points += 3
@@ -42,8 +46,9 @@ func (t *Team) CalcPoints(tx *gorm.DB) (err error) {
 				points += 1
 			} 
 		}
-
+	}
 	for _, game := range t.AwayGames {
+		if game.Status == "Beendet" || game.Status == "Läuft" {
 			if game.Result == "Heim" {
 				losses += 1
 			} else if game.Result == "Auswärts" {
@@ -53,6 +58,7 @@ func (t *Team) CalcPoints(tx *gorm.DB) (err error) {
 				draws += 1
 				points += 1
 			}
+		}
 	}
 	t.Wins = wins
 	t.Losses = losses
